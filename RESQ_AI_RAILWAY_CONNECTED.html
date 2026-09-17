@@ -1,0 +1,5726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RESQ AI | Vortex</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+
+    --bg:#050b16;
+    --panel:rgba(10,23,39,.92);
+    --panel2:rgba(15,35,55,.95);
+
+    --border:#1b3b55;
+
+    --text:#eef8ff;
+    --muted:#8da6ba;
+
+    --blue:#2696ff;
+    --cyan:#20d8ee;
+
+    --green:#21d58a;
+    --yellow:#ffc857;
+    --red:#ff4d5a;
+
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    min-height:100vh;
+
+    color:var(--text);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(0,150,255,.16),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(0,220,200,.10),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(80,50,220,.10),
+            transparent 35%
+        ),
+
+        linear-gradient(
+            135deg,
+            #030914,
+            #071727 45%,
+            #04101e
+        );
+
+    overflow-x:hidden;
+}
+
+
+/* =========================================================
+   ANIMATED BACKGROUND
+========================================================= */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    pointer-events:none;
+
+    background-image:
+
+        linear-gradient(
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        );
+
+    background-size:45px 45px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent
+        );
+
+    z-index:-2;
+
+}
+
+
+body::after{
+
+    content:"";
+
+    position:fixed;
+
+    width:400px;
+    height:400px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(34,211,238,.08),
+            transparent 70%
+        );
+
+    top:20%;
+    right:10%;
+
+    animation:
+        backgroundFloat 8s ease-in-out infinite;
+
+    pointer-events:none;
+
+    z-index:-1;
+}
+
+@keyframes backgroundFloat{
+
+    0%,100%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(-40px,30px);
+    }
+
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+
+    position:fixed;
+
+    left:0;
+    top:0;
+
+    width:250px;
+    height:100vh;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(5,19,32,.98),
+            rgba(4,13,24,.98)
+        );
+
+    border-right:1px solid var(--border);
+
+    padding:20px 14px;
+
+    z-index:100;
+
+    backdrop-filter:blur(15px);
+
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:5px 10px 22px;
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+.logoIcon{
+
+    width:44px;
+    height:44px;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff3344,
+            #ff6875
+        );
+
+    box-shadow:
+        0 8px 25px
+        rgba(255,60,80,.2);
+
+    font-size:23px;
+
+}
+
+.logo h2{
+    font-size:20px;
+}
+
+.logo small{
+
+    display:block;
+
+    margin-top:3px;
+
+    color:var(--cyan);
+
+    font-size:8px;
+
+    letter-spacing:.5px;
+
+}
+
+
+/* NAVIGATION */
+
+.nav{
+
+    margin-top:20px;
+
+}
+
+.nav button{
+
+    width:100%;
+
+    border:none;
+
+    background:transparent;
+
+    color:#96adbf;
+
+    padding:13px 14px;
+
+    margin-bottom:5px;
+
+    border-radius:8px;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    font-size:12px;
+
+    transition:
+        .25s;
+
+}
+
+.nav button:hover{
+
+    background:
+        rgba(38,150,255,.10);
+
+    color:white;
+
+    transform:translateX(3px);
+
+}
+
+.nav button.active{
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(38,150,255,.22),
+            rgba(38,150,255,.06)
+        );
+
+    color:white;
+
+    border-left:
+        3px solid var(--blue);
+
+}
+
+.navIcon{
+
+    display:inline-block;
+
+    width:27px;
+
+    font-size:15px;
+
+}
+
+
+/* SYSTEM STATUS */
+
+.system{
+
+    position:absolute;
+
+    left:20px;
+    right:20px;
+    bottom:20px;
+
+    padding:13px;
+
+    background:
+        rgba(13,35,53,.85);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:9px;
+
+}
+
+.systemOnline{
+
+    color:var(--green);
+
+    font-size:10px;
+
+}
+
+.system p{
+
+    color:#6d879a;
+
+    font-size:9px;
+
+    margin-top:5px;
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+
+    margin-left:250px;
+
+    min-height:100vh;
+
+}
+
+.topbar{
+
+    height:70px;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:50;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 28px;
+
+    background:
+        rgba(5,17,29,.86);
+
+    border-bottom:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(18px);
+
+}
+
+.topbar h1{
+
+    font-size:19px;
+
+}
+
+.topRight{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.demo{
+
+    padding:6px 11px;
+
+    border-radius:20px;
+
+    font-size:9px;
+
+    color:#ffd96c;
+
+    background:#352b12;
+
+    border:1px solid #6b5824;
+
+}
+
+.clock{
+
+    color:var(--muted);
+
+    font-size:11px;
+
+}
+
+
+/* =========================================================
+   PAGES
+========================================================= */
+
+.page{
+
+    display:none;
+
+    padding:26px 28px;
+
+    animation:
+        pageIn .3s ease;
+
+}
+
+.page.active{
+    display:block;
+}
+
+@keyframes pageIn{
+
+    from{
+        opacity:0;
+        transform:translateY(5px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+.pageTitle{
+
+    margin-bottom:22px;
+
+}
+
+.pageTitle h2{
+
+    font-size:24px;
+
+}
+
+.pageTitle p{
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    margin-top:6px;
+
+}
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+}
+
+.card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,37,57,.94),
+            rgba(8,21,35,.94)
+        );
+
+    border:
+        1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:17px;
+
+    transition:
+        .25s;
+
+}
+
+.card:hover{
+
+    transform:
+        translateY(-3px);
+
+    border-color:
+        #285a79;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,.25);
+
+}
+
+.card::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:80px;
+    height:80px;
+
+    right:-30px;
+    bottom:-30px;
+
+    border-radius:50%;
+
+    background:
+        rgba(38,150,255,.06);
+
+}
+
+.cardTop{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.cardTop p{
+
+    color:var(--muted);
+
+    font-size:9px;
+
+}
+
+.cardIcon{
+
+    width:38px;
+    height:38px;
+
+    border-radius:9px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:#143049;
+
+    font-size:17px;
+
+}
+
+.card h3{
+
+    margin-top:15px;
+
+    font-size:26px;
+
+}
+
+.cardBottom{
+
+    margin-top:4px;
+
+    font-size:9px;
+
+}
+
+
+/* COLORS */
+
+.green{
+    color:var(--green)!important;
+}
+
+.red{
+    color:var(--red)!important;
+}
+
+.yellow{
+    color:var(--yellow)!important;
+}
+
+.blue{
+    color:var(--blue)!important;
+}
+
+.cyan{
+    color:var(--cyan)!important;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:
+        2fr 1fr;
+
+    gap:18px;
+
+    margin-bottom:18px;
+
+}
+
+.panel{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(12,29,46,.94),
+            rgba(7,19,32,.96)
+        );
+
+    border:
+        1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:18px;
+
+    backdrop-filter:
+        blur(12px);
+
+}
+
+.panelTitle{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:15px;
+
+}
+
+.panelTitle h3{
+
+    font-size:13px;
+
+}
+
+.panelTitle span{
+
+    color:var(--muted);
+
+    font-size:9px;
+
+}
+
+
+/* =========================================================
+   MAP
+========================================================= */
+
+.map{
+
+    height:320px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:9px;
+
+    background:
+
+        linear-gradient(
+            rgba(255,255,255,.02) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.02) 1px,
+            transparent 1px
+        ),
+
+        #081a2a;
+
+    background-size:
+        35px 35px;
+
+}
+
+.road{
+
+    position:absolute;
+
+    width:130%;
+
+    height:3px;
+
+    background:#21465f;
+
+}
+
+.road1{
+
+    top:80px;
+    left:-30px;
+
+    transform:
+        rotate(-20deg);
+
+}
+
+.road2{
+
+    top:180px;
+    left:-30px;
+
+    transform:
+        rotate(18deg);
+
+}
+
+.road3{
+
+    top:260px;
+    left:-20px;
+
+    transform:
+        rotate(-7deg);
+
+}
+
+.mapPoint{
+
+    position:absolute;
+
+    width:17px;
+    height:17px;
+
+    border-radius:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+}
+
+.mapPoint::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-8px;
+
+    border:
+        1px solid currentColor;
+
+    border-radius:50%;
+
+    animation:
+        pulse 1.6s infinite;
+
+}
+
+@keyframes pulse{
+
+    50%{
+        transform:scale(1.5);
+        opacity:0;
+    }
+
+}
+
+.emergencyPoint{
+
+    background:var(--red);
+    color:var(--red);
+
+}
+
+.ambulancePoint{
+
+    background:var(--green);
+    color:var(--green);
+
+}
+
+.hospitalPoint{
+
+    background:var(--cyan);
+    color:var(--cyan);
+
+}
+
+.mapLabel{
+
+    position:absolute;
+
+    padding:5px 8px;
+
+    border-radius:5px;
+
+    background:#06131fe8;
+
+    border:
+        1px solid var(--border);
+
+    font-size:9px;
+
+    white-space:nowrap;
+
+}
+
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.alert{
+
+    display:flex;
+
+    gap:10px;
+
+    padding:11px;
+
+    margin-bottom:9px;
+
+    border-radius:7px;
+
+    background:#102233;
+
+    border-left:
+        3px solid var(--yellow);
+
+}
+
+.alert.redAlert{
+
+    border-left-color:
+        var(--red);
+
+}
+
+.alert.greenAlert{
+
+    border-left-color:
+        var(--green);
+
+}
+
+.alertIcon{
+    font-size:16px;
+}
+
+.alert strong{
+
+    font-size:10px;
+
+}
+
+.alert p{
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    margin-top:4px;
+
+    line-height:1.5;
+
+}
+
+
+/* =========================================================
+   RESPONSE CHAIN
+========================================================= */
+
+.statusChain{
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.statusStep{
+
+    flex:1;
+
+    position:relative;
+
+    text-align:center;
+
+}
+
+.statusStep:not(:last-child)::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:80%;
+
+    height:2px;
+
+    left:60%;
+
+    top:12px;
+
+    background:#284357;
+
+}
+
+.statusCircle{
+
+    width:25px;
+    height:25px;
+
+    margin:auto;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    border-radius:50%;
+
+    background:#1c3447;
+
+    position:relative;
+
+    z-index:2;
+
+    font-size:9px;
+
+}
+
+.statusStep.done .statusCircle{
+
+    background:var(--green);
+
+}
+
+.statusStep.current .statusCircle{
+
+    background:var(--blue);
+
+}
+
+.statusStep p{
+
+    color:var(--muted);
+
+    font-size:8px;
+
+    margin-top:6px;
+
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.tableWrap{
+    overflow:auto;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:
+        collapse;
+
+}
+
+th{
+
+    color:#7893a7;
+
+    text-align:left;
+
+    font-size:9px;
+
+    padding:11px;
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+td{
+
+    font-size:10px;
+
+    padding:12px 11px;
+
+    border-bottom:
+        1px solid #142b3c;
+
+}
+
+tr:hover{
+
+    background:
+        rgba(38,150,255,.05);
+
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+.badge{
+
+    display:inline-block;
+
+    padding:5px 8px;
+
+    border-radius:20px;
+
+    font-size:8px;
+
+}
+
+.badgeRed{
+
+    color:#ff7a82;
+
+    background:#3b171d;
+
+}
+
+.badgeGreen{
+
+    color:#58e6ae;
+
+    background:#103529;
+
+}
+
+.badgeYellow{
+
+    color:#ffd96b;
+
+    background:#3d3215;
+
+}
+
+.badgeBlue{
+
+    color:#5cb4ff;
+
+    background:#102f49;
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn{
+
+    border:none;
+
+    border-radius:7px;
+
+    padding:10px 14px;
+
+    color:white;
+
+    background:var(--blue);
+
+    cursor:pointer;
+
+    font-size:10px;
+
+    transition:.2s;
+
+}
+
+.btn:hover{
+
+    transform:
+        translateY(-1px);
+
+    opacity:.88;
+
+}
+
+.btnGreen{
+
+    background:#13875b;
+
+}
+
+.btnRed{
+
+    background:var(--red);
+
+}
+
+.btnDark{
+
+    background:#19364a;
+
+}
+
+.btnCall{
+
+    background:#176a88;
+
+}
+
+
+/* =========================================================
+   RESOURCE
+========================================================= */
+
+.resourceGrid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+
+}
+
+.resource{
+
+    padding:15px;
+
+    border-radius:9px;
+
+    background:
+        rgba(10,29,45,.9);
+
+    border:
+        1px solid var(--border);
+
+    transition:.2s;
+
+}
+
+.resource:hover{
+
+    transform:
+        translateY(-2px);
+
+    border-color:#285a79;
+
+}
+
+.resourceHead{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:8px;
+
+}
+
+.resource h4{
+    font-size:11px;
+}
+
+.resource p{
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    line-height:1.8;
+
+}
+
+.progress{
+
+    height:5px;
+
+    margin-top:9px;
+
+    overflow:hidden;
+
+    background:#1b3040;
+
+    border-radius:5px;
+
+}
+
+.progress div{
+
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--green),
+            var(--cyan)
+        );
+
+}
+
+
+/* =========================================================
+   AI
+========================================================= */
+
+.aiGrid{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:18px;
+
+}
+
+.gauge{
+
+    width:150px;
+    height:150px;
+
+    margin:20px auto;
+
+    border-radius:50%;
+
+    background:
+        conic-gradient(
+            var(--red) 0 72%,
+            #193144 72% 100%
+        );
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+}
+
+.gaugeInner{
+
+    width:110px;
+    height:110px;
+
+    border-radius:50%;
+
+    background:#0a1a2a;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+
+}
+
+.gaugeInner strong{
+    font-size:27px;
+}
+
+.prediction{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:12px 0;
+
+    border-bottom:
+        1px solid var(--border);
+
+    font-size:10px;
+
+}
+
+.prediction span{
+    color:var(--muted);
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.reportBox{
+
+    max-width:720px;
+
+    margin:auto;
+
+}
+
+.formGrid{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:14px;
+
+}
+
+.formGroup{
+    margin-bottom:12px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+label{
+
+    display:block;
+
+    color:#9eb4c6;
+
+    font-size:10px;
+
+    margin-bottom:6px;
+
+}
+
+input,
+select,
+textarea{
+
+    width:100%;
+
+    padding:11px;
+
+    border-radius:7px;
+
+    border:
+        1px solid var(--border);
+
+    background:#071522;
+
+    color:white;
+
+    outline:none;
+
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+
+    border-color:
+        var(--blue);
+
+    box-shadow:
+        0 0 0 2px
+        rgba(38,150,255,.08);
+
+}
+
+textarea{
+
+    min-height:80px;
+
+    resize:vertical;
+
+}
+
+.locationBox{
+
+    padding:12px;
+
+    margin-bottom:15px;
+
+    border-radius:7px;
+
+    background:
+        rgba(16,42,61,.9);
+
+    border:
+        1px dashed #2b5c79;
+
+    font-size:10px;
+
+}
+
+
+/* =========================================================
+   DRIVER
+========================================================= */
+
+.incoming{
+
+    padding:20px;
+
+    margin-bottom:18px;
+
+    border-radius:11px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(50,20,27,.95),
+            rgba(25,14,21,.96)
+        );
+
+    border:
+        1px solid var(--red);
+
+}
+
+.incomingHeader{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:18px;
+
+}
+
+.caseBig{
+
+    font-size:17px;
+
+    font-weight:bold;
+
+}
+
+.infoGrid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:10px;
+
+}
+
+.info{
+
+    padding:11px;
+
+    border-radius:7px;
+
+    background:#0b1b2a;
+
+}
+
+.info small{
+
+    display:block;
+
+    color:var(--muted);
+
+    font-size:8px;
+
+    margin-bottom:5px;
+
+}
+
+.info strong{
+    font-size:10px;
+}
+
+
+/* =========================================================
+   COMMUNICATION
+========================================================= */
+
+.message{
+
+    padding:11px;
+
+    margin-bottom:8px;
+
+    border-radius:7px;
+
+    background:#0d1f2f;
+
+    border:
+        1px solid rgba(255,255,255,.02);
+
+}
+
+.message time{
+
+    float:right;
+
+    color:#637d91;
+
+    font-size:8px;
+
+}
+
+.sender{
+
+    font-size:9px;
+
+    font-weight:bold;
+
+}
+
+.message p{
+
+    color:#9fb6c7;
+
+    font-size:9px;
+
+    line-height:1.5;
+
+    margin-top:5px;
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:200;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    background:
+        rgba(0,0,0,.75);
+
+    backdrop-filter:
+        blur(8px);
+
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modalBox{
+
+    width:100%;
+
+    max-width:580px;
+
+    padding:23px;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #0d2539,
+            #081725
+        );
+
+    border:
+        1px solid var(--border);
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.5);
+
+}
+
+.modalHeader{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:20px;
+
+}
+
+.close{
+
+    cursor:pointer;
+
+    font-size:21px;
+
+    color:#91a8ba;
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+
+    position:fixed;
+
+    right:22px;
+    bottom:22px;
+
+    z-index:300;
+
+    min-width:270px;
+
+    padding:14px 17px;
+
+    border-radius:9px;
+
+    display:none;
+
+    background:#10293b;
+
+    border:
+        1px solid #2d5d78;
+
+    box-shadow:
+        0 15px 40px
+        rgba(0,0,0,.35);
+
+}
+
+.toast.show{
+    display:block;
+}
+
+.toast b{
+    font-size:11px;
+}
+
+.toast p{
+
+    color:#9eb5c6;
+
+    font-size:9px;
+
+    margin-top:4px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px){
+
+    .cards{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .grid,
+    .aiGrid{
+        grid-template-columns:1fr;
+    }
+
+    .resourceGrid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+
+        width:65px;
+
+        padding:15px 7px;
+
+    }
+
+    .logo h2,
+    .logo small,
+    .system,
+    .nav button span:last-child{
+        display:none;
+    }
+
+    .logo{
+        justify-content:center;
+    }
+
+    .nav button{
+        text-align:center;
+    }
+
+    .main{
+        margin-left:65px;
+    }
+
+    .page{
+        padding:18px;
+    }
+
+    .cards,
+    .resourceGrid,
+    .formGrid,
+    .infoGrid{
+        grid-template-columns:1fr;
+    }
+
+    .topbar{
+        padding:0 15px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside class="sidebar">
+
+
+    <div class="logo">
+
+        <div class="logoIcon">
+            🚑
+        </div>
+
+        <div>
+
+            <h2>
+                RESQ AI
+            </h2>
+
+            <small>
+                VORTEX • SMART EMERGENCY
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <nav class="nav">
+
+
+        <button
+            class="active"
+            data-page="dashboard">
+
+            <span class="navIcon">📊</span>
+            <span>Control Room</span>
+
+        </button>
+
+
+        <button
+            data-page="cases">
+
+            <span class="navIcon">🚨</span>
+            <span>Emergency Cases</span>
+
+        </button>
+
+
+        <button
+            data-page="resources">
+
+            <span class="navIcon">🚑</span>
+            <span>Resources</span>
+
+        </button>
+
+
+        <button
+            data-page="hospitals">
+
+            <span class="navIcon">🏥</span>
+            <span>Hospitals</span>
+
+        </button>
+
+
+        <button
+            data-page="ai">
+
+            <span class="navIcon">🤖</span>
+            <span>RESQ AI</span>
+
+        </button>
+
+
+        <button
+            data-page="communication">
+
+            <span class="navIcon">📡</span>
+            <span>Communication</span>
+
+        </button>
+
+
+        <button
+            data-page="report">
+
+            <span class="navIcon">📱</span>
+            <span>Report Emergency</span>
+
+        </button>
+
+
+        <button
+            data-page="driver">
+
+            <span class="navIcon">🚑</span>
+            <span>Driver App</span>
+
+        </button>
+
+
+    </nav>
+
+
+    <div class="system">
+
+        <div class="systemOnline">
+            ● SYSTEM ONLINE
+        </div>
+
+        <p>
+            RESQ AI monitoring active
+        </p>
+
+    </div>
+
+
+</aside>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="main">
+
+
+<header class="topbar">
+
+    <h1 id="pageHeader">
+        Emergency Control Room
+    </h1>
+
+
+    <div class="topRight">
+
+        <div class="demo">
+            DEMO MODE
+        </div>
+
+        <div
+            id="clock"
+            class="clock">
+
+            --:--:--
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     DASHBOARD
+========================================================= -->
+
+<section
+    id="dashboard"
+    class="page active">
+
+
+    <div class="pageTitle">
+
+        <h2>
+            Emergency Control Room
+        </h2>
+
+        <p>
+            Real-time monitoring of the complete emergency response chain.
+        </p>
+
+    </div>
+
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <div class="cardTop">
+
+                <p>
+                    ACTIVE EMERGENCIES
+                </p>
+
+                <div class="cardIcon">
+                    🚨
+                </div>
+
+            </div>
+
+            <h3 id="activeCount">
+                1
+            </h3>
+
+            <div class="cardBottom red">
+                ● Live monitoring
+            </div>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="cardTop">
+
+                <p>
+                    AMBULANCES AVAILABLE
+                </p>
+
+                <div class="cardIcon">
+                    🚑
+                </div>
+
+            </div>
+
+            <h3 id="ambulanceCount">
+                4
+            </h3>
+
+            <div class="cardBottom green">
+                ● Ready for dispatch
+            </div>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="cardTop">
+
+                <p>
+                    HIGH RISK CASES
+                </p>
+
+                <div class="cardIcon">
+                    ⚠️
+                </div>
+
+            </div>
+
+            <h3 id="riskCount">
+                1
+            </h3>
+
+            <div class="cardBottom red">
+                Requires attention
+            </div>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="cardTop">
+
+                <p>
+                    AVG RESPONSE TIME
+                </p>
+
+                <div class="cardIcon">
+                    ⏱️
+                </div>
+
+            </div>
+
+            <h3>
+                08:42
+            </h3>
+
+            <div class="cardBottom green">
+                ↓ 12% this session
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- MAP -->
+
+    <div class="grid">
+
+
+        <div class="panel">
+
+            <div class="panelTitle">
+
+                <h3>
+                    📍 Live Emergency Map
+                </h3>
+
+                <span>
+                    GPS MONITORING ACTIVE
+                </span>
+
+            </div>
+
+
+            <div class="map">
+
+
+                <div class="road road1"></div>
+                <div class="road road2"></div>
+                <div class="road road3"></div>
+
+
+                <div
+                    class="mapPoint emergencyPoint"
+                    style="left:42%;top:42%;">
+
+                </div>
+
+
+                <div
+                    class="mapLabel"
+                    style="left:44%;top:35%;">
+
+                    🚨 Emergency
+
+                </div>
+
+
+                <div
+                    id="mainAmbulancePoint"
+                    class="mapPoint ambulancePoint"
+                    style="left:25%;top:62%;">
+
+                </div>
+
+
+                <div
+                    class="mapLabel"
+                    style="left:27%;top:65%;">
+
+                    🚑 VTX-AMB-01
+
+                </div>
+
+
+                <div
+                    class="mapPoint hospitalPoint"
+                    style="left:73%;top:30%;">
+
+                </div>
+
+
+                <div
+                    class="mapLabel"
+                    style="left:75%;top:25%;">
+
+                    🏥 City Emergency
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ALERTS -->
+
+        <div class="panel">
+
+            <div class="panelTitle">
+
+                <h3>
+                    ⚠️ Live Alerts
+                </h3>
+
+                <span>
+                    AI MONITORING
+                </span>
+
+            </div>
+
+
+            <div id="alertList">
+
+
+                <div class="alert redAlert">
+
+                    <div class="alertIcon">
+                        🚨
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            High Risk Emergency
+                        </strong>
+
+                        <p>
+                            VTX-20260917-001 requires immediate response.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="alert">
+
+                    <div class="alertIcon">
+                        📡
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Traffic Risk
+                        </strong>
+
+                        <p>
+                            Traffic congestion detected on response route.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="alert greenAlert">
+
+                    <div class="alertIcon">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Hospital Ready
+                        </strong>
+
+                        <p>
+                            City Emergency Hospital confirmed readiness.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- RESPONSE CHAIN -->
+
+    <div class="panel">
+
+        <div class="panelTitle">
+
+            <h3>
+                🔗 Emergency Response Chain
+            </h3>
+
+            <span>
+
+                CASE:
+                <b id="chainCase">
+                    VTX-20260917-001
+                </b>
+
+            </span>
+
+        </div>
+
+
+        <div class="statusChain">
+
+
+            <div class="statusStep done">
+
+                <div class="statusCircle">
+                    ✓
+                </div>
+
+                <p>
+                    Emergency
+                </p>
+
+            </div>
+
+
+            <div class="statusStep done">
+
+                <div class="statusCircle">
+                    ✓
+                </div>
+
+                <p>
+                    Control Room
+                </p>
+
+            </div>
+
+
+            <div class="statusStep done">
+
+                <div class="statusCircle">
+                    ✓
+                </div>
+
+                <p>
+                    AI Analysis
+                </p>
+
+            </div>
+
+
+            <div class="statusStep current">
+
+                <div class="statusCircle">
+                    4
+                </div>
+
+                <p>
+                    Ambulance
+                </p>
+
+            </div>
+
+
+            <div class="statusStep">
+
+                <div class="statusCircle">
+                    5
+                </div>
+
+                <p>
+                    Hospital
+                </p>
+
+            </div>
+
+
+            <div class="statusStep">
+
+                <div class="statusCircle">
+                    6
+                </div>
+
+                <p>
+                    Handover
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =========================================================
+     CASES
+========================================================= -->
+
+<section
+    id="cases"
+    class="page">
+
+
+    <div class="pageTitle">
+
+        <h2>
+            Emergency Cases
+        </h2>
+
+        <p>
+            Central case management by the Control Room.
+        </p>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="panelTitle">
+
+            <h3>
+                Live Cases
+            </h3>
+
+            <button
+                class="btn"
+                id="newEmergencyButton">
+
+                + New Emergency
+
+            </button>
+
+        </div>
+
+
+        <div class="tableWrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            CASE ID
+                        </th>
+
+                        <th>
+                            TYPE
+                        </th>
+
+                        <th>
+                            LOCATION
+                        </th>
+
+                        <th>
+                            RISK
+                        </th>
+
+                        <th>
+                            AMBULANCE
+                        </th>
+
+                        <th>
+                            HOSPITAL
+                        </th>
+
+                        <th>
+                            STATUS
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="caseTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     RESOURCES
+========================================================= -->
+
+<section
+    id="resources"
+    class="page">
+
+
+    <div class="pageTitle">
+
+        <h2>
+            Smart Resource Allocation
+        </h2>
+
+        <p>
+            RESQ AI recommends the most suitable available ambulance.
+        </p>
+
+    </div>
+
+
+    <div class="resourceGrid">
+
+
+        <div class="resource">
+
+            <div class="resourceHead">
+
+                <h4>
+                    🚑 VTX-AMB-01
+                </h4>
+
+                <span class="green">
+                    ● AVAILABLE
+                </span>
+
+            </div>
+
+            <p>
+                Location: Pollachi North
+            </p>
+
+            <p>
+                Distance: 3.2 km
+            </p>
+
+            <p>
+                ETA: 06 min
+            </p>
+
+            <div class="progress">
+                <div style="width:90%;"></div>
+            </div>
+
+        </div>
+
+
+
+        <div class="resource">
+
+            <div class="resourceHead">
+
+                <h4>
+                    🚑 VTX-AMB-02
+                </h4>
+
+                <span class="green">
+                    ● AVAILABLE
+                </span>
+
+            </div>
+
+            <p>
+                Location: Kinathukadavu
+            </p>
+
+            <p>
+                Distance: 8.4 km
+            </p>
+
+            <p>
+                ETA: 13 min
+            </p>
+
+            <div class="progress">
+                <div style="width:70%;"></div>
+            </div>
+
+        </div>
+
+
+
+        <div class="resource">
+
+            <div class="resourceHead">
+
+                <h4>
+                    🚑 VTX-AMB-03
+                </h4>
+
+                <span class="yellow">
+                    ● BUSY
+                </span>
+
+            </div>
+
+            <p>
+                Current case: VTX-20260916-008
+            </p>
+
+            <p>
+                Location: Coimbatore
+            </p>
+
+            <p>
+                ETA: --
+            </p>
+
+            <div class="progress">
+                <div style="width:40%;"></div>
+            </div>
+
+        </div>
+
+
+
+        <div class="resource">
+
+            <div class="resourceHead">
+
+                <h4>
+                    🚑 VTX-AMB-04
+                </h4>
+
+                <span class="green">
+                    ● AVAILABLE
+                </span>
+
+            </div>
+
+            <p>
+                Location: Pollachi East
+            </p>
+
+            <p>
+                Distance: 5.6 km
+            </p>
+
+            <p>
+                ETA: 09 min
+            </p>
+
+            <div class="progress">
+                <div style="width:80%;"></div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div
+        class="panel"
+        style="margin-top:18px;">
+
+        <div class="panelTitle">
+
+            <h3>
+                🤖 AI Allocation Recommendation
+            </h3>
+
+        </div>
+
+
+        <div class="alert greenAlert">
+
+            <div class="alertIcon">
+                🤖
+            </div>
+
+            <div>
+
+                <strong>
+                    VTX-AMB-01 Recommended
+                </strong>
+
+                <p>
+                    RESQ AI selected the ambulance using location,
+                    availability and estimated travel time.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     HOSPITAL
+========================================================= -->
+
+<section
+    id="hospitals"
+    class="page">
+
+
+    <div class="pageTitle">
+
+        <h2>
+            Hospital Readiness
+        </h2>
+
+        <p>
+            Hospital readiness information for emergency coordination.
+        </p>
+
+    </div>
+
+
+    <div class="resourceGrid">
+
+
+        <div class="resource">
+
+            <div class="resourceHead">
+
+                <h4>
+                    🏥 City Emergency Hospital
+                </h4>
+
+                <span class="green">
+                    ● READY
+                </span>
+
+            </div>
+
+            <p>
+                Distance: 5.8 km
+            </p>
+
+            <p>
+                Estimated travel: 11 min
+            </p>
+
+            <p>
+                Emergency Department: Available
+            </p>
+
+            <p>
+                Suitability: Suitable
+            </p>
+
+            <div class="progress">
+                <div style="width:82%;"></div>
+            </div>
+
+        </div>
+
+
+
+        <div class="resource">
+
+            <div class="resourceHead">
+
+                <h4>
+                    🏥 Government Hospital
+                </h4>
+
+                <span class="yellow">
+                    ● LIMITED
+                </span>
+
+            </div>
+
+            <p>
+                Distance: 4.1 km
+            </p>
+
+            <p>
+                Estimated travel: 10 min
+            </p>
+
+            <p>
+                Emergency Department: High Load
+            </p>
+
+            <p>
+                Suitability: Review Required
+            </p>
+
+            <div class="progress">
+                <div style="width:55%;"></div>
+            </div>
+
+        </div>
+
+
+
+        <div class="resource">
+
+            <div class="resourceHead">
+
+                <h4>
+                    🏥 Metro Medical Centre
+                </h4>
+
+                <span class="green">
+                    ● READY
+                </span>
+
+            </div>
+
+            <p>
+                Distance: 9.3 km
+            </p>
+
+            <p>
+                Estimated travel: 17 min
+            </p>
+
+            <p>
+                Emergency Department: Available
+            </p>
+
+            <p>
+                Suitability: Suitable
+            </p>
+
+            <div class="progress">
+                <div style="width:72%;"></div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     AI
+========================================================= -->
+
+<section
+    id="ai"
+    class="page">
+
+
+    <div class="pageTitle">
+
+        <h2>
+            RESQ AI Prediction Engine
+        </h2>
+
+        <p>
+            AI-assisted prediction of emergency response delays.
+        </p>
+
+    </div>
+
+
+    <div class="aiGrid">
+
+
+        <div
+            class="panel"
+            style="text-align:center;">
+
+            <h3>
+                Current Case Risk
+            </h3>
+
+
+            <div class="gauge">
+
+                <div class="gaugeInner">
+
+                    <strong>
+                        72%
+                    </strong>
+
+                    <small class="red">
+                        HIGH RISK
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <p
+                style="
+                    color:var(--muted);
+                    font-size:10px;
+                ">
+
+                RESQ AI detected elevated delay probability.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="panel">
+
+            <div class="panelTitle">
+
+                <h3>
+                    AI Analysis
+                </h3>
+
+            </div>
+
+
+            <div class="prediction">
+
+                <span>
+                    Traffic condition
+                </span>
+
+                <b class="red">
+                    High
+                </b>
+
+            </div>
+
+
+            <div class="prediction">
+
+                <span>
+                    Distance
+                </span>
+
+                <b>
+                    5.8 km
+                </b>
+
+            </div>
+
+
+            <div class="prediction">
+
+                <span>
+                    Resource availability
+                </span>
+
+                <b class="green">
+                    Good
+                </b>
+
+            </div>
+
+
+            <div class="prediction">
+
+                <span>
+                    Estimated response
+                </span>
+
+                <b>
+                    08 min
+                </b>
+
+            </div>
+
+
+            <div class="prediction">
+
+                <span>
+                    Delay probability
+                </span>
+
+                <b class="red">
+                    72%
+                </b>
+
+            </div>
+
+
+            <div class="prediction">
+
+                <span>
+                    Hospital readiness
+                </span>
+
+                <b class="green">
+                    Ready
+                </b>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div
+        class="panel"
+        style="margin-top:18px;">
+
+        <div class="panelTitle">
+
+            <h3>
+                WATCH → CHECK → PREDICT → HELP
+            </h3>
+
+        </div>
+
+
+        <div class="statusChain">
+
+
+            <div class="statusStep done">
+
+                <div class="statusCircle">
+                    ✓
+                </div>
+
+                <p>
+                    WATCH
+                </p>
+
+            </div>
+
+
+            <div class="statusStep done">
+
+                <div class="statusCircle">
+                    ✓
+                </div>
+
+                <p>
+                    CHECK
+                </p>
+
+            </div>
+
+
+            <div class="statusStep current">
+
+                <div class="statusCircle">
+                    3
+                </div>
+
+                <p>
+                    PREDICT
+                </p>
+
+            </div>
+
+
+            <div class="statusStep">
+
+                <div class="statusCircle">
+                    4
+                </div>
+
+                <p>
+                    HELP
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     COMMUNICATION
+========================================================= -->
+
+<section
+    id="communication"
+    class="page">
+
+
+    <div class="pageTitle">
+
+        <h2>
+            Communication Center
+        </h2>
+
+        <p>
+            Central communication between Control Room,
+            Driver and Hospital.
+        </p>
+
+    </div>
+
+
+    <div class="grid">
+
+
+        <div class="panel">
+
+            <div class="panelTitle">
+
+                <h3>
+                    📡 Communication Log
+                </h3>
+
+                <span>
+                    LIVE
+                </span>
+
+            </div>
+
+
+            <div id="messages">
+
+
+                <div class="message">
+
+                    <time>
+                        10:31
+                    </time>
+
+                    <div class="sender">
+                        🎧 CONTROL ROOM
+                    </div>
+
+                    <p>
+                        Emergency case created.
+                        Ambulance assigned.
+                    </p>
+
+                </div>
+
+
+                <div class="message">
+
+                    <time>
+                        10:32
+                    </time>
+
+                    <div class="sender">
+                        🤖 RESQ AI
+                    </div>
+
+                    <p>
+                        High traffic risk detected.
+                    </p>
+
+                </div>
+
+
+                <div class="message">
+
+                    <time>
+                        10:33
+                    </time>
+
+                    <div class="sender">
+                        🚑 DRIVER
+                    </div>
+
+                    <p>
+                        Ambulance accepted emergency assignment.
+                    </p>
+
+                </div>
+
+
+                <div class="message">
+
+                    <time>
+                        10:34
+                    </time>
+
+                    <div class="sender">
+                        🏥 HOSPITAL
+                    </div>
+
+                    <p>
+                        Emergency department ready.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <div class="panel">
+
+            <div class="panelTitle">
+
+                <h3>
+                    Connection Status
+                </h3>
+
+            </div>
+
+
+            <div class="prediction">
+
+                <span>
+                    Control Room
+                </span>
+
+                <b class="green">
+                    ONLINE
+                </b>
+
+            </div>
+
+
+            <div class="prediction">
+
+                <span>
+                    Driver GPS
+                </span>
+
+                <b class="green">
+                    CONNECTED
+                </b>
+
+            </div>
+
+
+            <div class="prediction">
+
+                <span>
+                    Hospital
+                </span>
+
+                <b class="green">
+                    CONNECTED
+                </b>
+
+            </div>
+
+
+            <div class="prediction">
+
+                <span>
+                    RESQ AI
+                </span>
+
+                <b class="green">
+                    ACTIVE
+                </b>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     REPORT EMERGENCY
+========================================================= -->
+
+<section
+    id="report"
+    class="page">
+
+
+    <div class="pageTitle">
+
+        <h2>
+            📱 Report Emergency
+        </h2>
+
+        <p>
+            No mandatory login is required to report an emergency.
+        </p>
+
+    </div>
+
+
+    <div class="reportBox">
+
+        <div class="panel">
+
+
+            <div
+                class="locationBox"
+                id="locationBox">
+
+                📍 Emergency location can be detected automatically.
+
+                <button
+                    type="button"
+                    class="btn btnDark"
+                    id="gpsButton"
+                    style="float:right;">
+
+                    Get GPS
+
+                </button>
+
+            </div>
+
+
+            <form
+                id="emergencyForm">
+
+
+                <div class="formGrid">
+
+
+                    <div class="formGroup">
+
+                        <label>
+                            Emergency Type *
+                        </label>
+
+                        <select
+                            id="emergencyType"
+                            required>
+
+                            <option value="">
+                                Select emergency
+                            </option>
+
+                            <option>
+                                Road Accident
+                            </option>
+
+                            <option>
+                                Medical Emergency
+                            </option>
+
+                            <option>
+                                Fire Emergency
+                            </option>
+
+                            <option>
+                                Cardiac Emergency
+                            </option>
+
+                            <option>
+                                Multiple Injuries
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="formGroup">
+
+                        <label>
+                            Number of Injured People *
+                        </label>
+
+                        <input
+                            id="injured"
+                            type="number"
+                            min="1"
+                            max="100"
+                            required
+                            placeholder="Example: 2">
+
+                    </div>
+
+
+                    <div class="formGroup full">
+
+                        <label>
+                            Emergency Location *
+                        </label>
+
+                        <input
+                            id="location"
+                            required
+                            placeholder="Location / landmark">
+
+                    </div>
+
+
+                    <div class="formGroup">
+
+                        <label>
+                            Caller Name
+                        </label>
+
+                        <input
+                            id="caller"
+                            placeholder="Optional">
+
+                    </div>
+
+
+                    <div class="formGroup">
+
+                        <label>
+                            Contact Number
+                        </label>
+
+                        <input
+                            id="phone"
+                            type="tel"
+                            placeholder="Optional">
+
+                    </div>
+
+
+                    <div class="formGroup full">
+
+                        <label>
+                            Additional Information
+                        </label>
+
+                        <textarea
+                            id="details"
+                            placeholder="Describe the emergency briefly..."></textarea>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btnRed"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        font-size:12px;
+                    ">
+
+                    🚨 REPORT EMERGENCY
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     DRIVER
+========================================================= -->
+
+<section
+    id="driver"
+    class="page">
+
+
+    <div class="pageTitle">
+
+        <h2>
+            🚑 Driver Application
+        </h2>
+
+        <p>
+            Driver receives the emergency assignment before accepting it.
+        </p>
+
+    </div>
+
+
+
+    <!-- INCOMING REQUEST -->
+
+    <div
+        class="incoming"
+        id="driverIncoming">
+
+
+        <div class="incomingHeader">
+
+
+            <div>
+
+                <div class="caseBig">
+                    NEW EMERGENCY REQUEST
+                </div>
+
+                <p
+                    style="
+                        color:var(--muted);
+                        font-size:9px;
+                        margin-top:5px;
+                    ">
+
+                    Assignment received from RESQ AI
+
+                </p>
+
+            </div>
+
+
+            <span class="badge badgeRed">
+                HIGH PRIORITY
+            </span>
+
+
+        </div>
+
+
+
+        <div class="infoGrid">
+
+
+            <div class="info">
+
+                <small>
+                    CASE ID
+                </small>
+
+                <strong id="driverCase">
+                    VTX-20260917-001
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <small>
+                    EMERGENCY TYPE
+                </small>
+
+                <strong id="driverType">
+                    Road Accident
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <small>
+                    INJURED PEOPLE
+                </small>
+
+                <strong id="driverInjured">
+                    2 people
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <small>
+                    EMERGENCY LOCATION
+                </small>
+
+                <strong id="driverLocation">
+                    Pollachi Main Road
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <small>
+                    DISTANCE
+                </small>
+
+                <strong>
+                    3.2 km
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <small>
+                    AI RISK
+                </small>
+
+                <strong class="red">
+                    HIGH – 72%
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <small>
+                    RECOMMENDED HOSPITAL
+                </small>
+
+                <strong>
+                    City Emergency Hospital
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <small>
+                    ESTIMATED ETA
+                </small>
+
+                <strong>
+                    06 minutes
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <small>
+                    GPS
+                </small>
+
+                <strong class="green">
+                    AVAILABLE
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ONLY 3 DRIVER ACTIONS -->
+
+        <div
+            style="
+                display:flex;
+                gap:10px;
+                margin-top:20px;
+                flex-wrap:wrap;
+            ">
+
+
+            <button
+                type="button"
+                id="acceptButton"
+                class="btn btnGreen"
+                style="flex:1;padding:14px;">
+
+                ✓ ACCEPT
+
+            </button>
+
+
+            <button
+                type="button"
+                id="denyButton"
+                class="btn btnRed"
+                style="flex:1;padding:14px;">
+
+                ✕ DENY
+
+            </button>
+
+
+            <button
+                type="button"
+                id="callButton"
+                class="btn btnCall"
+                style="flex:1;padding:14px;">
+
+                📞 CALL CONTROL ROOM
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- PERMISSIONS -->
+
+    <div
+        class="panel"
+        style="margin-bottom:18px;">
+
+
+        <div class="panelTitle">
+
+            <h3>
+                🔐 Driver Permissions
+            </h3>
+
+            <span>
+                RESTRICTED ACCESS
+            </span>
+
+        </div>
+
+
+        <div class="prediction">
+
+            <span>
+                View emergency details
+            </span>
+
+            <b class="green">
+                ALLOWED
+            </b>
+
+        </div>
+
+
+        <div class="prediction">
+
+            <span>
+                Accept assignment
+            </span>
+
+            <b class="green">
+                ALLOWED
+            </b>
+
+        </div>
+
+
+        <div class="prediction">
+
+            <span>
+                Deny assignment
+            </span>
+
+            <b class="green">
+                ALLOWED
+            </b>
+
+        </div>
+
+
+        <div class="prediction">
+
+            <span>
+                Call Control Room
+            </span>
+
+            <b class="green">
+                ALLOWED
+            </b>
+
+        </div>
+
+
+        <div class="prediction">
+
+            <span>
+                Modify emergency information
+            </span>
+
+            <b class="red">
+                NOT ALLOWED
+            </b>
+
+        </div>
+
+
+        <div class="prediction">
+
+            <span>
+                Modify case status
+            </span>
+
+            <b class="red">
+                NOT ALLOWED
+            </b>
+
+        </div>
+
+
+        <div class="prediction">
+
+            <span>
+                Change hospital
+            </span>
+
+            <b class="red">
+                NOT ALLOWED
+            </b>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- GPS -->
+
+    <div class="panel">
+
+
+        <div class="panelTitle">
+
+            <h3>
+                📍 Ambulance GPS Monitoring
+            </h3>
+
+            <span
+                id="gpsStatus">
+
+                WAITING FOR ACCEPTANCE
+
+            </span>
+
+        </div>
+
+
+        <div class="map">
+
+
+            <div class="road road1"></div>
+            <div class="road road2"></div>
+            <div class="road road3"></div>
+
+
+            <div
+                id="driverPoint"
+                class="mapPoint ambulancePoint"
+                style="
+                    left:20%;
+                    top:65%;
+                ">
+
+            </div>
+
+
+            <div
+                class="mapPoint emergencyPoint"
+                style="
+                    left:65%;
+                    top:40%;
+                ">
+
+            </div>
+
+
+            <div
+                class="mapLabel"
+                style="
+                    left:21%;
+                    top:68%;
+                ">
+
+                🚑 Ambulance
+
+            </div>
+
+
+            <div
+                class="mapLabel"
+                style="
+                    left:67%;
+                    top:35%;
+                ">
+
+                🚨 Emergency
+
+            </div>
+
+
+        </div>
+
+
+        <div
+            style="
+                margin-top:15px;
+                padding:12px;
+                background:#102334;
+                border-radius:8px;
+            ">
+
+            <p
+                style="
+                    color:var(--muted);
+                    font-size:9px;
+                    line-height:1.7;
+                ">
+
+                📡 Ambulance location is monitored
+                automatically through GPS.
+
+                <br>
+
+                The driver does
+                <b class="red">
+                    NOT manually update
+                </b>
+                the case.
+
+                <br>
+
+                For any issue or delay, use
+                <b class="cyan">
+                    CALL CONTROL ROOM
+                </b>.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     MODAL
+========================================================= -->
+
+<div
+    id="successModal"
+    class="modal">
+
+
+    <div class="modalBox">
+
+
+        <div class="modalHeader">
+
+            <h2>
+                🚨 Emergency Registered
+            </h2>
+
+            <span
+                class="close"
+                id="closeModal">
+
+                ×
+
+            </span>
+
+        </div>
+
+
+        <div
+            style="
+                text-align:center;
+                padding:10px;
+            ">
+
+
+            <div
+                style="
+                    font-size:45px;
+                ">
+
+                🆔
+
+            </div>
+
+
+            <p
+                style="
+                    color:var(--muted);
+                    font-size:10px;
+                ">
+
+                Automatically generated Case ID
+
+            </p>
+
+
+            <h1
+                id="newCaseId"
+                style="
+                    margin:10px 0;
+                    color:var(--cyan);
+                ">
+
+                VTX-00000000-000
+
+            </h1>
+
+
+            <p
+                style="
+                    color:#a8bfd0;
+                    font-size:10px;
+                    line-height:1.8;
+                ">
+
+                Emergency information has been sent
+                to the Control Room.
+
+                <br><br>
+
+                RESQ AI is analyzing the emergency,
+                traffic, available resources and
+                hospital readiness.
+
+            </p>
+
+
+            <button
+                type="button"
+                id="openControlRoom"
+                class="btn"
+                style="margin-top:18px;">
+
+                OPEN CONTROL ROOM
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+    id="toast"
+    class="toast">
+
+    <b id="toastTitle">
+        RESQ AI
+    </b>
+
+    <p id="toastMessage">
+        Notification
+    </p>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   RAILWAY BACKEND API
+========================================================= */
+const API = "https://resq-ai-production-945e.up.railway.app";
+
+/* =========================================================
+   APPLICATION STATE
+========================================================= */
+
+const state = {
+
+    cases:[],
+
+    currentCase:{
+
+        id:"VTX-20260917-001",
+
+        type:"Road Accident",
+
+        injured:2,
+
+        location:"Pollachi Main Road",
+
+        risk:72,
+
+        ambulance:"VTX-AMB-01",
+
+        hospital:"City Emergency Hospital",
+
+        status:"En Route"
+
+    },
+
+    gpsTimer:null,
+
+    gpsWatchId:null,
+
+    gpsProgress:20,
+
+    latitude:null,
+
+    longitude:null
+
+};
+
+
+/* =========================================================
+   INITIAL CASE
+========================================================= */
+
+state.cases.push({
+
+    ...state.currentCase
+
+});
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock(){
+
+    const now =
+        new Date();
+
+    document.getElementById(
+        "clock"
+    ).textContent =
+        now.toLocaleTimeString();
+
+}
+
+setInterval(
+    updateClock,
+    1000
+);
+
+updateClock();
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+const pageNames = {
+
+    dashboard:
+        "Emergency Control Room",
+
+    cases:
+        "Emergency Cases",
+
+    resources:
+        "Smart Resource Allocation",
+
+    hospitals:
+        "Hospital Readiness",
+
+    ai:
+        "RESQ AI Prediction",
+
+    communication:
+        "Communication Center",
+
+    report:
+        "Report Emergency",
+
+    driver:
+        "Driver Application"
+
+};
+
+
+document
+.querySelectorAll(".nav button")
+.forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        ()=>{
+
+            const page =
+                button.dataset.page;
+
+            showPage(
+                page,
+                button
+            );
+
+        }
+    );
+
+});
+
+
+function showPage(
+    pageId,
+    button
+){
+
+    document
+    .querySelectorAll(".page")
+    .forEach(page=>{
+
+        page.classList.remove(
+            "active"
+        );
+
+    });
+
+
+    const selected =
+        document.getElementById(
+            pageId
+        );
+
+
+    if(selected){
+
+        selected.classList.add(
+            "active"
+        );
+
+    }
+
+
+    document
+    .querySelectorAll(".nav button")
+    .forEach(btn=>{
+
+        btn.classList.remove(
+            "active"
+        );
+
+    });
+
+
+    if(button){
+
+        button.classList.add(
+            "active"
+        );
+
+    }
+
+
+    document.getElementById(
+        "pageHeader"
+    ).textContent =
+        pageNames[pageId];
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(
+    title,
+    message
+){
+
+    document.getElementById(
+        "toastTitle"
+    ).textContent =
+        title;
+
+
+    document.getElementById(
+        "toastMessage"
+    ).textContent =
+        message;
+
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        ()=>{
+            toast.classList.remove(
+                "show"
+            );
+        },
+        3500
+    );
+
+}
+
+
+/* =========================================================
+   GPS
+========================================================= */
+
+document
+.getElementById("gpsButton")
+.addEventListener(
+    "click",
+    getLocation
+);
+
+
+function getLocation(){
+
+    const box =
+        document.getElementById(
+            "locationBox"
+        );
+
+
+    if(
+        !navigator.geolocation
+    ){
+
+        box.textContent =
+            "📍 GPS is not supported by this browser.";
+
+        return;
+
+    }
+
+
+    box.innerHTML =
+        "📡 Detecting GPS location...";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        position=>{
+
+            state.latitude =
+                position.coords.latitude;
+
+            state.longitude =
+                position.coords.longitude;
+
+
+            box.innerHTML = `
+
+                📍 GPS LOCATION DETECTED
+
+                <br>
+
+                <small>
+
+                    Latitude:
+                    ${state.latitude.toFixed(5)}
+
+                    |
+
+                    Longitude:
+                    ${state.longitude.toFixed(5)}
+
+                </small>
+
+            `;
+
+
+            showToast(
+                "GPS Connected",
+                "Emergency location detected automatically."
+            );
+
+        },
+
+        ()=>{
+
+            box.innerHTML = `
+
+                📍 GPS permission unavailable.
+                Demo location can be entered manually.
+
+                <button
+                    type="button"
+                    class="btn btnDark"
+                    style="float:right;"
+                    id="retryGps">
+
+                    Retry GPS
+
+                </button>
+
+            `;
+
+
+            document
+            .getElementById("retryGps")
+            .addEventListener(
+                "click",
+                getLocation
+            );
+
+        }
+
+    );
+
+}
+
+
+/* =========================================================
+   CASE ID
+========================================================= */
+
+function generateCaseId(){
+
+    const now =
+        new Date();
+
+
+    const date =
+        now
+        .toISOString()
+        .slice(0,10)
+        .replaceAll(
+            "-",
+            ""
+        );
+
+
+    const number =
+        Math.floor(
+            Math.random()*900
+        )+100;
+
+
+    return `VTX-${date}-${number}`;
+
+}
+
+
+/* =========================================================
+   AI RISK
+========================================================= */
+
+function calculateRisk(
+    type,
+    injured
+){
+
+    let risk = 40;
+
+
+    if(
+        type === "Road Accident"
+    )
+        risk += 20;
+
+
+    if(
+        type === "Cardiac Emergency"
+    )
+        risk += 25;
+
+
+    if(
+        type === "Multiple Injuries"
+    )
+        risk += 25;
+
+
+    if(
+        type === "Fire Emergency"
+    )
+        risk += 15;
+
+
+    if(
+        Number(injured) >= 3
+    )
+        risk += 15;
+
+
+    if(
+        Number(injured) >= 5
+    )
+        risk += 10;
+
+
+    return Math.min(
+        risk,
+        95
+    );
+
+}
+
+
+/* =========================================================
+   RESOURCE SELECTION
+========================================================= */
+
+function selectAmbulance(){
+
+    return "VTX-AMB-01";
+
+}
+
+
+/* =========================================================
+   HOSPITAL SELECTION
+========================================================= */
+
+function selectHospital(){
+
+    return "City Emergency Hospital";
+
+}
+
+
+/* =========================================================
+   EMERGENCY FORM
+========================================================= */
+
+/* =========================================================
+   EMERGENCY FORM - BACKEND CONNECTED
+========================================================= */
+
+document
+.getElementById(
+    "emergencyForm"
+)
+.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+        /* GET FORM DATA */
+
+        const type =
+            document.getElementById(
+                "emergencyType"
+            ).value;
+
+        const injured =
+            Number(
+                document.getElementById(
+                    "injured"
+                ).value
+            );
+
+        const location =
+            document.getElementById(
+                "location"
+            ).value.trim();
+
+        const caller =
+            document.getElementById(
+                "caller"
+            ).value.trim();
+
+        const phone =
+            document.getElementById(
+                "phone"
+            ).value.trim();
+
+
+        /* VALIDATION */
+
+        if (
+            !type ||
+            !location ||
+            !Number.isFinite(injured) ||
+            injured < 1
+        ) {
+
+            showToast(
+                "Invalid Information",
+                "Please enter the required emergency details."
+            );
+
+            return;
+        }
+
+
+        /* SEND EMERGENCY TO PYTHON */
+
+        try {
+
+            showToast(
+                "RESQ AI",
+                "Sending emergency to Control Room..."
+            );
+
+
+            const response =
+                await fetch(
+                    `${API}/api/emergencies`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                emergency_type:
+                                    type,
+
+                                injured_count:
+                                    injured,
+
+                                caller_name:
+                                    caller || null,
+
+                                caller_phone:
+                                    phone || null,
+
+                                location:
+                                    location
+
+                            })
+                    }
+                );
+
+
+            /* CHECK RESPONSE */
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                console.error(
+                    "Backend error:",
+                    errorText
+                );
+
+                throw new Error(
+                    "Emergency creation failed"
+                );
+            }
+
+
+            /* GET PYTHON RESPONSE */
+
+            const result =
+                await response.json();
+
+
+            console.log(
+                "✅ Emergency created by Python:",
+                result
+            );
+
+
+            /*
+             * IMPORTANT:
+             * CASE ID IS GENERATED BY PYTHON
+             */
+
+            const caseId =
+                result.case_id;
+
+
+            /* AUTOMATIC AMBULANCE ASSIGNMENT */
+
+            const assignResponse =
+                await fetch(
+                    `${API}/api/emergencies/${caseId}/assign-ambulance`,
+                    {
+                        method: "POST"
+                    }
+                );
+
+
+            if (!assignResponse.ok) {
+
+                console.warn(
+                    "Ambulance assignment failed"
+                );
+
+            }
+
+
+            /* RELOAD DATA FROM DATABASE */
+
+            await loadEmergenciesFromBackend();
+
+
+            /* SHOW CASE ID */
+
+            document.getElementById(
+                "newCaseId"
+            ).textContent =
+                caseId;
+
+
+            document.getElementById(
+                "successModal"
+            ).classList.add(
+                "show"
+            );
+
+
+            /* COMMUNICATION */
+
+            addMessage(
+                "🎧 CONTROL ROOM",
+                `New emergency ${caseId} received.`
+            );
+
+
+            addMessage(
+                "🤖 RESQ AI",
+                `Risk prediction completed: ${result.risk_score}% — ${result.risk_level}.`
+            );
+
+
+            addMessage(
+                "🚑 DRIVER",
+                "Emergency assignment sent to the suitable ambulance driver."
+            );
+
+
+            /* SUCCESS MESSAGE */
+
+            showToast(
+                "Emergency Received",
+                `${caseId} created successfully.`
+            );
+
+
+            /* CLEAR FORM */
+
+            event.target.reset();
+
+
+        } catch (error) {
+
+            console.error(
+                "❌ Emergency creation error:",
+                error
+            );
+
+
+            showToast(
+                "Backend Error",
+                "Could not register emergency. Make sure main.py is running."
+            );
+
+        }
+
+    }
+);
+
+/* =========================================================
+   UPDATE INTERFACE
+========================================================= */
+
+function updateInterface(){
+
+    const c =
+        state.currentCase;
+
+
+    document.getElementById(
+        "driverCase"
+    ).textContent =
+        c.id;
+
+
+    document.getElementById(
+        "driverType"
+    ).textContent =
+        c.type;
+
+
+    document.getElementById(
+        "driverInjured"
+    ).textContent =
+        c.injured +
+        " people";
+
+
+    document.getElementById(
+        "driverLocation"
+    ).textContent =
+        c.location;
+
+
+    document.getElementById(
+        "chainCase"
+    ).textContent =
+        c.id;
+
+
+    updateCaseTable();
+
+}
+
+
+/* =========================================================
+   CASE TABLE
+========================================================= */
+
+function updateCaseTable(){
+
+    const table =
+        document.getElementById(
+            "caseTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    state.cases
+    .slice()
+    .reverse()
+    .forEach(c=>{
+
+
+        let riskClass =
+            c.risk >= 70
+            ? "badgeRed"
+            : c.risk >= 45
+            ? "badgeYellow"
+            : "badgeGreen";
+
+
+        const row =
+            document.createElement(
+                "tr"
+            );
+
+
+        row.innerHTML = `
+
+            <td>
+                <b>${c.id}</b>
+            </td>
+
+            <td>
+                ${c.type}
+            </td>
+
+            <td>
+                ${c.location}
+            </td>
+
+            <td>
+
+                <span
+                    class="badge ${riskClass}">
+
+                    ${c.risk}% RISK
+
+                </span>
+
+            </td>
+
+            <td>
+                ${c.ambulance}
+            </td>
+
+            <td>
+                ${c.hospital}
+            </td>
+
+            <td>
+
+                <span
+                    class="badge badgeBlue">
+
+                    ${c.status}
+
+                </span>
+
+            </td>
+
+        `;
+
+
+        table.appendChild(
+            row
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   DRIVER ACCEPT
+========================================================= */
+
+document
+.getElementById(
+    "acceptButton"
+)
+.addEventListener(
+    "click",
+    acceptCase
+);
+
+
+async function acceptCase(){
+
+    /* GET CURRENT CASE ID */
+
+    const caseId =
+        state.currentCase.case_id ||
+        state.currentCase.id;
+
+    if (!caseId) {
+
+        showToast(
+            "Error",
+            "No emergency case selected."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        /* SEND ACCEPT TO PYTHON */
+
+        const response =
+            await fetch(
+                `${API}/api/emergencies/${caseId}/driver-response`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        action: "ACCEPT"
+                    })
+                }
+            );
+
+
+        /* CHECK PYTHON RESPONSE */
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "Driver accept error:",
+                errorText
+            );
+
+            throw new Error(
+                "Driver acceptance failed"
+            );
+        }
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "✅ Driver accepted:",
+            result
+        );
+
+
+        /* RELOAD DATA FROM PYTHON */
+
+        await loadEmergenciesFromBackend();
+
+
+        /* UPDATE GPS STATUS */
+
+        document.getElementById(
+            "gpsStatus"
+        ).textContent =
+            "GPS MONITORING ACTIVE";
+
+
+        document.getElementById(
+            "gpsStatus"
+        ).className =
+            "green";
+
+
+        /* COMMUNICATION */
+
+        addMessage(
+            "🚑 DRIVER",
+            `Ambulance accepted case ${caseId}.`
+        );
+
+
+        addMessage(
+            "🎧 CONTROL ROOM",
+            "Driver acceptance received. GPS monitoring started."
+        );
+
+
+        /* SUCCESS MESSAGE */
+
+        showToast(
+            "Emergency Accepted",
+            "Control Room has been notified."
+        );
+
+
+        /* START GPS */
+
+        startGPS();
+
+    } catch (error) {
+
+        console.error(
+            "❌ Accept error:",
+            error
+        );
+
+        showToast(
+            "Backend Error",
+            "Driver acceptance could not be sent to Python."
+        );
+    }
+
+}
+
+
+/* =========================================================
+   DRIVER DENY
+========================================================= */
+
+document
+.getElementById(
+    "denyButton"
+)
+.addEventListener(
+    "click",
+    declineCase
+);
+
+
+function declineCase(){
+
+    state.currentCase.status =
+        "Driver Denied";
+
+
+    updateCaseTable();
+
+
+    addMessage(
+        "🚑 DRIVER",
+        `Driver denied case ${state.currentCase.id}.`
+    );
+
+
+    addMessage(
+        "🎧 CONTROL ROOM",
+        "Driver denial received."
+    );
+
+
+    addMessage(
+        "🤖 RESQ AI",
+        "Searching for another available ambulance."
+    );
+
+
+    showToast(
+        "Emergency Denied",
+        "Control Room has been notified."
+    );
+
+
+    setTimeout(
+        ()=>{
+
+            state.currentCase.ambulance =
+                "VTX-AMB-02";
+
+
+            state.currentCase.status =
+                "Waiting for Driver";
+
+
+            updateInterface();
+
+
+            addMessage(
+                "🤖 RESQ AI",
+                "VTX-AMB-02 selected as the next suitable ambulance."
+            );
+
+
+            showToast(
+                "New Assignment",
+                "Alternative ambulance selected."
+            );
+
+        },
+        1800
+    );
+
+}
+
+
+/* =========================================================
+   CALL CONTROL ROOM
+========================================================= */
+
+document
+.getElementById(
+    "callButton"
+)
+.addEventListener(
+    "click",
+    callControlRoom
+);
+
+
+function callControlRoom(){
+
+    const number =
+        "+9118001234567";
+
+
+    addMessage(
+        "🚑 DRIVER",
+        `Driver requested Control Room call.`
+    );
+
+
+    showToast(
+        "📞 Control Room",
+        "Opening Control Room phone connection."
+    );
+
+
+    /*
+       On a real phone this opens
+       the phone dialer.
+    */
+
+    window.location.href =
+        "tel:" + number;
+
+}
+
+
+/* =========================================================
+   GPS MONITORING
+========================================================= */
+
+async function sendGPSPosition(position, caseId) {
+
+    const latitude = Number(position.coords.latitude);
+    const longitude = Number(position.coords.longitude);
+
+    if (
+        !Number.isFinite(latitude) ||
+        !Number.isFinite(longitude)
+    ) {
+        console.error("Invalid GPS coordinates:", latitude, longitude);
+        return;
+    }
+
+    state.latitude = latitude;
+    state.longitude = longitude;
+
+    console.log("📍 GPS:", latitude, longitude);
+
+    try {
+
+        const response = await fetch(
+            `${API}/api/emergencies/${encodeURIComponent(caseId)}/gps`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    latitude: latitude,
+                    longitude: longitude
+                })
+            }
+        );
+
+        const responseText = await response.text();
+
+        if (!response.ok) {
+            console.error(
+                `GPS update failed (${response.status}):`,
+                responseText
+            );
+
+            showToast(
+                "GPS Backend Error",
+                `Python returned HTTP ${response.status}.`
+            );
+
+            return;
+        }
+
+        let result = {};
+
+        try {
+            result = responseText
+                ? JSON.parse(responseText)
+                : {};
+        } catch {
+            result = { raw: responseText };
+        }
+
+        console.log("✅ GPS sent to Python:", result);
+
+        const gpsStatus = document.getElementById("gpsStatus");
+
+        if (gpsStatus) {
+            gpsStatus.textContent = "GPS MONITORING ACTIVE";
+            gpsStatus.className = "green";
+        }
+
+        const point = document.getElementById("mainAmbulancePoint");
+
+        if (point) {
+            point.title =
+                `GPS: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+        }
+
+        addMessage(
+            "🤖 RESQ AI",
+            `GPS location updated: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+        );
+
+    } catch (error) {
+
+        console.error("❌ GPS backend error:", error);
+
+        showToast(
+            "GPS Connection Error",
+            "Could not send GPS data to Python."
+        );
+    }
+}
+
+
+function startGPS() {
+
+    const caseId =
+        state.currentCase?.case_id ||
+        state.currentCase?.id;
+
+    if (!caseId) {
+
+        console.error("❌ GPS: No active case ID.");
+
+        showToast(
+            "GPS Error",
+            "No active emergency case selected."
+        );
+
+        return;
+    }
+
+    if (!navigator.geolocation) {
+
+        console.error(
+            "❌ GPS is not supported by this browser."
+        );
+
+        showToast(
+            "GPS Error",
+            "This browser does not support GPS."
+        );
+
+        return;
+    }
+
+    if (
+        state.gpsWatchId !== null &&
+        state.gpsWatchId !== undefined
+    ) {
+        navigator.geolocation.clearWatch(
+            state.gpsWatchId
+        );
+
+        state.gpsWatchId = null;
+    }
+
+    const gpsStatus =
+        document.getElementById("gpsStatus");
+
+    if (gpsStatus) {
+        gpsStatus.textContent = "REQUESTING GPS...";
+        gpsStatus.className = "yellow";
+    }
+
+    showToast(
+        "GPS Monitoring",
+        "Please allow location access."
+    );
+
+    navigator.geolocation.getCurrentPosition(
+
+        position => {
+            sendGPSPosition(position, caseId);
+        },
+
+        error => {
+
+            console.error(
+                "Initial GPS error:",
+                error
+            );
+
+            if (gpsStatus) {
+                gpsStatus.textContent =
+                    "GPS PERMISSION REQUIRED";
+                gpsStatus.className = "red";
+            }
+
+            if (error.code === 1) {
+
+                showToast(
+                    "GPS Permission Denied",
+                    "Allow location access in Chrome."
+                );
+
+            } else {
+
+                showToast(
+                    "GPS Error",
+                    error.message ||
+                    "Unable to get your location."
+                );
+            }
+        },
+
+        {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 15000
+        }
+    );
+
+    state.gpsWatchId =
+        navigator.geolocation.watchPosition(
+
+            position => {
+                sendGPSPosition(position, caseId);
+            },
+
+            error => {
+
+                console.error(
+                    "Continuous GPS error:",
+                    error
+                );
+
+                if (gpsStatus) {
+                    gpsStatus.textContent =
+                        "GPS ERROR";
+                    gpsStatus.className = "red";
+                }
+            },
+
+            {
+                enableHighAccuracy: true,
+                maximumAge: 5000,
+                timeout: 15000
+            }
+        );
+
+    console.log(
+        "📡 GPS watcher started:",
+        state.gpsWatchId
+    );
+}
+
+
+/* =========================================================
+   COMMUNICATION
+========================================================= */
+
+function addMessage(
+    sender,
+    message
+){
+
+    const container =
+        document.getElementById(
+            "messages"
+        );
+
+
+    const time =
+        new Date()
+        .toLocaleTimeString(
+            [],
+            {
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
+
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.className =
+        "message";
+
+
+    div.innerHTML = `
+
+        <time>
+            ${time}
+        </time>
+
+        <div class="sender">
+            ${sender}
+        </div>
+
+        <p>
+            ${message}
+        </p>
+
+    `;
+
+
+    container.prepend(
+        div
+    );
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+document
+.getElementById(
+    "closeModal"
+)
+.addEventListener(
+    "click",
+    closeModal
+);
+
+
+function closeModal(){
+
+    document.getElementById(
+        "successModal"
+    ).classList.remove(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   OPEN CONTROL ROOM
+========================================================= */
+
+document
+.getElementById(
+    "openControlRoom"
+)
+.addEventListener(
+    "click",
+    ()=>{
+
+        closeModal();
+
+
+        const button =
+            document.querySelector(
+                '.nav button[data-page="dashboard"]'
+            );
+
+
+        showPage(
+            "dashboard",
+            button
+        );
+
+    }
+);
+
+
+/* =========================================================
+   NEW EMERGENCY BUTTON
+========================================================= */
+
+document
+.getElementById(
+    "newEmergencyButton"
+)
+.addEventListener(
+    "click",
+    ()=>{
+
+        const button =
+            document.querySelector(
+                '.nav button[data-page="report"]'
+            );
+
+
+        showPage(
+            "report",
+            button
+        );
+
+    }
+);
+
+
+/* =========================================================
+   DEMO AI MONITOR
+========================================================= */
+
+setInterval(
+    ()=>{
+
+        /*
+           FRONTEND DEMO ONLY.
+
+           Real implementation:
+           Backend/GPS/traffic APIs would
+           continuously provide data.
+        */
+
+
+        if(
+            state.currentCase.status ===
+            "Accepted / En Route"
+        ){
+
+            if(
+                Math.random() > .82
+            ){
+
+                addMessage(
+                    "🤖 RESQ AI",
+                    "Possible delay detected from GPS/ETA analysis. Control Room alerted."
+                );
+
+
+                showToast(
+                    "⚠ AI EARLY WARNING",
+                    "Possible response delay detected."
+                );
+
+            }
+
+        }
+
+    },
+    10000
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+updateInterface();
+
+</script>
+<script>
+
+/* ================================
+   CONNECT FRONTEND TO BACKEND
+================================ */
+
+async function loadEmergenciesFromBackend() {
+
+    try {
+
+        const response =
+            await fetch(`${API}/api/emergencies`);
+
+        if (!response.ok) {
+            throw new Error(
+                `Backend request failed: HTTP ${response.status}`
+            );
+        }
+
+        const emergencies =
+            await response.json();
+
+        console.log(
+            "Backend emergencies:",
+            emergencies
+        );
+
+        state.cases =
+            emergencies.map(c => ({
+
+                id:
+                    c.case_id,
+
+                case_id:
+                    c.case_id,
+
+                type:
+                    c.emergency_type,
+
+                injured:
+                    c.injured_count,
+
+                location:
+                    c.location ||
+                    "GPS Location",
+
+                caller:
+                    c.caller_name ||
+                    "",
+
+                phone:
+                    c.caller_phone ||
+                    "",
+
+                risk:
+                    Number(c.risk_score) ||
+                    0,
+
+                riskLevel:
+                    c.risk_level ||
+                    "LOW",
+
+                ambulance:
+                    c.ambulance_id ||
+                    "Waiting",
+
+                hospital:
+                    c.hospital_name ||
+                    "Checking",
+
+                status:
+                    c.case_status ||
+                    "Reported",
+
+                eta:
+                    c.eta ??
+                    null,
+
+                gps:
+                    Boolean(c.gps_available),
+
+                latitude:
+                    c.latitude ??
+                    null,
+
+                longitude:
+                    c.longitude ??
+                    null
+            }));
+
+        if (state.cases.length > 0) {
+
+            state.currentCase =
+                state.cases[0];
+
+            if (
+                Number.isFinite(
+                    Number(state.currentCase.latitude)
+                )
+            ) {
+                state.latitude =
+                    Number(state.currentCase.latitude);
+            }
+
+            if (
+                Number.isFinite(
+                    Number(state.currentCase.longitude)
+                )
+            ) {
+                state.longitude =
+                    Number(state.currentCase.longitude);
+            }
+        }
+
+        updateInterface();
+
+    } catch (error) {
+
+        console.error(
+            "Backend connection error:",
+            error
+        );
+
+        showToast(
+            "Backend Connection Error",
+            "Make sure main.py is running."
+        );
+    }
+}
+
+
+/* ================================
+   TEST BACKEND CONNECTION
+================================ */
+
+async function checkBackend() {
+    try {
+        const response = await fetch(`${API}/`);
+
+        if (response.ok) {
+            console.log("✅ RESQ AI Backend Connected");
+        }
+
+    } catch (error) {
+        console.error("❌ Backend not connected");
+    }
+}
+
+
+/* ================================
+   START CONNECTION
+================================ */
+
+checkBackend();
+loadEmergenciesFromBackend();
+
+</script>
+</body>
+</html>
